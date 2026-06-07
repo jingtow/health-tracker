@@ -31,7 +31,7 @@ body {
 .messages { flex: 1; overflow-y: auto; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; }
 .messages::-webkit-scrollbar { width: 4px; }
 .messages::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-.msg { display: flex; gap: 8px; max-width: 90%; }
+.msg { display: flex; gap: 8px; max-width: 92%; }
 .msg.user { align-self: flex-end; flex-direction: row-reverse; }
 .msg.bot { align-self: flex-start; }
 .mav { width: 34px; height: 34px; border-radius: 50%; background: #06C755; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: flex-end; }
@@ -68,14 +68,34 @@ body {
 .unit { font-size: 11px; color: #aaa; text-align: center; }
 .submit-btn { width: 100%; padding: 10px; border-radius: 10px; background: #06C755; border: none; color: white; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; font-family: inherit; }
 .submit-btn:hover { opacity: 0.88; }
-.rtable { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
-.rtable th { color: #888; font-weight: 500; padding: 4px 5px; text-align: left; border-bottom: 1.5px solid #eee; white-space: nowrap; }
-.rtable td { padding: 5px 5px; border-bottom: 0.5px solid #f0f0f0; color: #333; vertical-align: middle; }
-.rtable tr:last-child td { border-bottom: none; }
-.act-btn { border: none; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; font-family: inherit; }
-.edit-btn { background: #e8f5e9; color: #06C755; margin-right: 3px; }
+
+/* 日期卡片 */
+.result-header { font-size: 13px; color: #555; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.result-count { background: #e8f5e9; color: #06C755; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+.day-card { background: #f9f9f9; border-radius: 12px; margin-bottom: 10px; overflow: hidden; border: 1px solid #eee; }
+.day-header { background: #06C755; padding: 7px 12px; display: flex; align-items: center; justify-content: space-between; }
+.day-title { font-size: 13px; font-weight: 600; color: white; }
+.day-count { font-size: 11px; color: rgba(255,255,255,0.85); }
+.record-row { padding: 10px 12px; border-bottom: 1px solid #eee; }
+.record-row:last-child { border-bottom: none; }
+.record-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.record-time { font-size: 12px; color: #aaa; }
+.record-type { font-size: 12px; font-weight: 600; color: #06C755; background: #e8f5e9; padding: 2px 8px; border-radius: 8px; }
+.record-type.glucose { color: #2196F3; background: #e3f2fd; }
+.record-type.heartonly { color: #FF7043; background: #fbe9e7; }
+.record-values { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+.val-item { display: flex; flex-direction: column; gap: 1px; }
+.val-label { font-size: 11px; color: #aaa; }
+.val-num { font-size: 18px; font-weight: 700; color: #222; line-height: 1.2; }
+.val-unit { font-size: 11px; color: #aaa; }
+.record-note { font-size: 12px; color: #888; margin-bottom: 6px; }
+.record-actions { display: flex; gap: 6px; }
+.act-btn { flex: 1; padding: 5px; border-radius: 7px; border: none; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
+.edit-btn { background: #e8f5e9; color: #06C755; }
 .del-btn { background: #ffeaea; color: #e53935; }
 .act-btn:hover { opacity: 0.8; }
+
+/* Modal */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; justify-content: center; align-items: center; }
 .modal-overlay.show { display: flex; }
 .modal { background: white; border-radius: 14px; padding: 20px; width: 88%; max-width: 360px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
@@ -127,26 +147,10 @@ body {
         <button class="form-close" onclick="closeForm()">×</button>
       </div>
       <div class="form-grid">
-        <div class="field">
-          <label>收縮壓（高壓）</label>
-          <input type="number" id="systolic" placeholder="120" min="60" max="220">
-          <span class="unit">mmHg</span>
-        </div>
-        <div class="field">
-          <label>舒張壓（低壓）</label>
-          <input type="number" id="diastolic" placeholder="80" min="40" max="140">
-          <span class="unit">mmHg</span>
-        </div>
-        <div class="field">
-          <label>心率</label>
-          <input type="number" id="heartrate" placeholder="72" min="30" max="200">
-          <span class="unit">bpm</span>
-        </div>
-        <div class="field">
-          <label>備註（選填）</label>
-          <input type="text" id="bpNote" placeholder="例：飯後量">
-          <span class="unit">&nbsp;</span>
-        </div>
+        <div class="field"><label>收縮壓（高壓）</label><input type="number" id="systolic" placeholder="120" min="60" max="220"><span class="unit">mmHg</span></div>
+        <div class="field"><label>舒張壓（低壓）</label><input type="number" id="diastolic" placeholder="80" min="40" max="140"><span class="unit">mmHg</span></div>
+        <div class="field"><label>心率</label><input type="number" id="heartrate" placeholder="72" min="30" max="200"><span class="unit">bpm</span></div>
+        <div class="field"><label>備註（選填）</label><input type="text" id="bpNote" placeholder="例：飯後量"><span class="unit">&nbsp;</span></div>
       </div>
       <button class="submit-btn" onclick="saveBP()">確認儲存</button>
     </div>
@@ -157,16 +161,8 @@ body {
         <button class="form-close" onclick="closeForm()">×</button>
       </div>
       <div class="form-grid single">
-        <div class="field">
-          <label>血糖值</label>
-          <input type="number" id="glucose" placeholder="105" min="20" max="600">
-          <span class="unit">mg/dL</span>
-        </div>
-        <div class="field">
-          <label>備註（選填）</label>
-          <input type="text" id="glucoseNote" placeholder="例：飯前、飯後2小時">
-          <span class="unit">&nbsp;</span>
-        </div>
+        <div class="field"><label>血糖值</label><input type="number" id="glucose" placeholder="105" min="20" max="600"><span class="unit">mg/dL</span></div>
+        <div class="field"><label>備註（選填）</label><input type="text" id="glucoseNote" placeholder="例：飯前、飯後2小時"><span class="unit">&nbsp;</span></div>
       </div>
       <button class="submit-btn" onclick="saveGlucose()">確認儲存</button>
     </div>
@@ -177,14 +173,8 @@ body {
         <button class="form-close" onclick="closeForm()">×</button>
       </div>
       <div class="form-grid">
-        <div class="field">
-          <label>起始日</label>
-          <input type="date" id="startDate">
-        </div>
-        <div class="field">
-          <label>結束日</label>
-          <input type="date" id="endDate">
-        </div>
+        <div class="field"><label>起始日</label><input type="date" id="startDate"></div>
+        <div class="field"><label>結束日</label><input type="date" id="endDate"></div>
       </div>
       <button class="submit-btn" onclick="queryRecords()">查詢</button>
     </div>
@@ -206,6 +196,7 @@ body {
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxEUnka_Dt-_5vItlRpQv1J0JTerezwXOz50FuF--YeXRH5gMs0Ppu71p3ikDRUTCNCjg/exec';
 let currentPerson = '富美';
 let editingRecord = null;
+const WEEKDAYS = ['日','一','二','三','四','五','六'];
 
 window.onload = function() {
   const today = new Date();
@@ -309,6 +300,42 @@ async function saveGlucose() {
   } catch(e) { hideTyping(); addBotMsg('⚠️ 連線失敗：' + e.message); }
 }
 
+function buildRecordRow(row) {
+  const t = String(row.timestamp).substring(11, 16);
+  const isBP = row.type === '血壓' || row.type === '血壓+心率';
+  const isGlucose = row.type === '血糖';
+  const isHR = row.type === '心率';
+  const typeClass = isGlucose ? 'glucose' : isHR ? 'heartonly' : '';
+  const typeLabel = row.type.replace('+', '＋');
+  const rowData = encodeURIComponent(JSON.stringify(row));
+
+  let vals = '';
+  if (isBP) {
+    vals += `<div class="val-item"><span class="val-label">收縮壓</span><span class="val-num">${row.systolic}</span><span class="val-unit">mmHg</span></div>`;
+    vals += `<div class="val-item"><span class="val-label">舒張壓</span><span class="val-num">${row.diastolic}</span><span class="val-unit">mmHg</span></div>`;
+    if (row.heart_rate) vals += `<div class="val-item"><span class="val-label">心率</span><span class="val-num">${row.heart_rate}</span><span class="val-unit">bpm</span></div>`;
+  } else if (isGlucose) {
+    vals += `<div class="val-item"><span class="val-label">血糖值</span><span class="val-num">${row.glucose}</span><span class="val-unit">mg/dL</span></div>`;
+  } else if (isHR) {
+    vals += `<div class="val-item"><span class="val-label">心率</span><span class="val-num">${row.heart_rate}</span><span class="val-unit">bpm</span></div>`;
+  }
+
+  const noteHtml = row.note ? `<div class="record-note">📝 ${row.note}</div>` : '';
+
+  return `<div class="record-row">
+    <div class="record-top">
+      <span class="record-time">${t}</span>
+      <span class="record-type ${typeClass}">${typeLabel}</span>
+    </div>
+    <div class="record-values">${vals}</div>
+    ${noteHtml}
+    <div class="record-actions">
+      <button class="act-btn edit-btn" onclick="openEdit('${rowData}')">✏️ 編輯</button>
+      <button class="act-btn del-btn" onclick="deleteRecord('${rowData}')">🗑️ 刪除</button>
+    </div>
+  </div>`;
+}
+
 async function queryRecords() {
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
@@ -325,30 +352,33 @@ async function queryRecords() {
       addBotMsg(`<strong>${currentPerson}</strong> 在 ${start} ～ ${end} 沒有紀錄 📝`);
       return;
     }
-    let html = `📊 <strong>${currentPerson}</strong>　${start} ～ ${end}　共 ${r.data.length} 筆<br><br>`;
-    html += `<table class="rtable"><tr><th>時間</th><th>類型</th><th>數值</th><th>備註</th><th></th></tr>`;
+
+    // 依日期分組
+    const groups = {};
     for (const row of r.data) {
-      let val = '';
-      if (row.type === '血壓' || row.type === '血壓+心率') {
-        val = `${row.systolic}/${row.diastolic}`;
-        if (row.heart_rate) val += ` ♥${row.heart_rate}`;
-      } else if (row.type === '心率') {
-        val = `♥${row.heart_rate} bpm`;
-      } else if (row.type === '血糖') {
-        val = row.glucose + ' mg/dL';
-      }
-      const t = String(row.timestamp).substring(5, 16);
-      const rowData = encodeURIComponent(JSON.stringify(row));
-      html += `<tr>
-        <td>${t}</td><td>${row.type}</td><td>${val}</td>
-        <td style="color:#999;font-size:12px">${row.note || ''}</td>
-        <td style="white-space:nowrap">
-          <button class="act-btn edit-btn" onclick="openEdit('${rowData}')">編輯</button>
-          <button class="act-btn del-btn" onclick="deleteRecord('${rowData}')">刪除</button>
-        </td>
-      </tr>`;
+      const dateKey = String(row.timestamp).substring(0, 10);
+      if (!groups[dateKey]) groups[dateKey] = [];
+      groups[dateKey].push(row);
     }
-    html += '</table>';
+
+    let html = `<div class="result-header">📊 <strong>${currentPerson}</strong>　${start} ～ ${end} <span class="result-count">共 ${r.data.length} 筆</span></div>`;
+
+    for (const dateKey of Object.keys(groups).sort()) {
+      const rows = groups[dateKey];
+      const d = new Date(dateKey);
+      const mo = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      const wd = WEEKDAYS[d.getDay()];
+      const rowsHtml = rows.map(buildRecordRow).join('');
+      html += `<div class="day-card">
+        <div class="day-header">
+          <span class="day-title">📅 ${mo}月${day}日（星期${wd}）</span>
+          <span class="day-count">${rows.length} 筆</span>
+        </div>
+        ${rowsHtml}
+      </div>`;
+    }
+
     addBotMsg(html);
   } catch(e) { hideTyping(); addBotMsg('⚠️ 查詢失敗：' + e.message); }
 }
@@ -357,14 +387,18 @@ function openEdit(rowData) {
   const row = JSON.parse(decodeURIComponent(rowData));
   editingRecord = row;
   const isBP = row.type === '血壓' || row.type === '血壓+心率';
-  const isHR = row.type === '心率';
   const isGlucose = row.type === '血糖';
-  document.getElementById('editModalTitle').textContent = `編輯${row.type}紀錄`;
+  document.getElementById('editModalTitle').textContent = `編輯${row.type.replace('+','＋')}紀錄`;
   let fields = '';
-  if (isBP || isHR) {
+  if (isBP) {
     fields += `<div class="modal-grid" style="margin-bottom:10px">
-      ${isBP ? `<div class="field"><label>收縮壓</label><input type="number" id="e_systolic" value="${row.systolic||''}"><span class="unit">mmHg</span></div>
-      <div class="field"><label>舒張壓</label><input type="number" id="e_diastolic" value="${row.diastolic||''}"><span class="unit">mmHg</span></div>` : ''}
+      <div class="field"><label>收縮壓</label><input type="number" id="e_systolic" value="${row.systolic||''}"><span class="unit">mmHg</span></div>
+      <div class="field"><label>舒張壓</label><input type="number" id="e_diastolic" value="${row.diastolic||''}"><span class="unit">mmHg</span></div>
+      <div class="field"><label>心率</label><input type="number" id="e_heartrate" value="${row.heart_rate||''}"><span class="unit">bpm</span></div>
+      <div class="field"><label>備註</label><input type="text" id="e_note" value="${row.note||''}"></div>
+    </div>`;
+  } else if (row.type === '心率') {
+    fields += `<div class="modal-grid single" style="margin-bottom:10px">
       <div class="field"><label>心率</label><input type="number" id="e_heartrate" value="${row.heart_rate||''}"><span class="unit">bpm</span></div>
       <div class="field"><label>備註</label><input type="text" id="e_note" value="${row.note||''}"></div>
     </div>`;
@@ -403,7 +437,7 @@ async function submitEdit() {
     const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
     const r = await res.json();
     hideTyping();
-    if (r.success) { addBotMsg(`✏️ 紀錄已更新！請重新查詢確認最新資料。`); }
+    if (r.success) { addBotMsg('✏️ 紀錄已更新！請重新查詢確認最新資料。'); }
     else { addBotMsg('⚠️ 更新失敗：' + (r.message || '未知錯誤')); }
   } catch(e) { hideTyping(); addBotMsg('⚠️ 連線失敗：' + e.message); }
 }
